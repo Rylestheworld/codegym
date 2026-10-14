@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 64" fill="none"><title>CodeGym</title><g stroke="#d9fc75" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M22 14H12V50H22M42 14H52V50H42" stroke-width="6"/>
+  <path d="M20 24V40M44 24V40M20 32H44" stroke-width="5"/>
+  <path d="M35 24L29 40" stroke-width="4"/>
+ </g>
+<text x="76" y="43" font-family="Courier New,monospace" font-size="30" fill="#d9fc75"><tspan font-weight="bold">CODE</tspan><tspan>GYM</tspan></text></svg>

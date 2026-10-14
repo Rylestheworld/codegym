@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+ <title>CodeGym Shield Lift Concept</title>
+ <path d="M32 6L54 14V31C54 45 43 53 32 58C21 53 10 45 10 31V14Z" fill="#182a24"/>
+ <g stroke="#d9fc75" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 24V38M42 24V38M18 28V34M46 28V34M22 31H42"/></g>
+ <path d="M30 22L26 25M34 22L38 25" stroke="#d9fc75" stroke-width="2" stroke-linecap="round"/>
+</svg>
