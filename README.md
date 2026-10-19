@@ -71,3 +71,15 @@ This repository is prepared for public GitHub Pages hosting. Visitors need only 
 The Pages workflow checks the curriculum metadata and learning rules, builds an explicit application-only directory with `python3 scripts/build_site.py`, and publishes that directory. Local distribution files, Cloudflare account details, credentials, and screenshots are excluded from version control and deployment. Select GitHub Actions as the Pages source in repository settings.
 
 Source visibility does not imply a blanket open-source license. Third-party runtime licenses are retained under assets/pyodide/.
+
+## Proving Grounds and Personal Achievements
+
+Training Grounds now includes six personal milestone badges and three original advanced missions: Repair the Event Ledger (JavaScript), Diagnose the Quiet Outage (a JavaScript deployment simulation), and Investigate the Retry Window (Python with a self-reviewed KQL investigation plan). Missions are available immediately; readiness recommendations use unlocked topic tiers, including provisional placement.
+
+Tests cover duplicates, boundary conditions, correlation, and input preservation. Each mission requires passing tests on the current draft, an 80-character debrief, and self-review. Debrief correctness is not automatically graded. Estimated durations are uncalibrated planning estimates. The deployment mission does not execute Bash, Docker, or Kubernetes; the cyber mission does not execute KQL. These are initial Proving Grounds challenges, not certifications or a complete expert curriculum.
+
+Hints, reference solutions, and declared outside assistance mark the attempt assisted across reloads. First completion records are preserved; replaying earns no extra XP or achievements. Independent completion is self-reported. Drafts and completion records are included in existing progress exports; imported drafts must be tested again before a new completion can be recorded. Stored achievements are personal records and can be edited locally.
+
+Shared accounts, weekly/topic rankings, and private group leaderboards remain future work. Trusted competitive scoring requires server-side validation and persistent identity; this static site does not provide those services.
+
+Run `node tests/browser-proving.cjs` with Playwright available in NODE_PATH and Chrome installed to verify the browser flows. Set CODEGYM_TEST_URL to the local or deployed site. The test uses an isolated browser profile and does not modify other visitors' progress.

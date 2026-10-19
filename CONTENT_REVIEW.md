@@ -26,3 +26,7 @@ The local mission query runner intentionally supports only a small documented KQ
 Practiced records completed unaided quick-rep practice. Retained is measured per topic tier after two successful delayed checks on separate scheduled dates. Each check requires a separate transfer example and two tier answers, all correct and confident without help. Initial intervals are 3, 7, 21, then 30 days; a failed or uncertain check is due tomorrow. This is a practical starting policy, not a claim that this exact spacing is optimal for every learner.
 
 Old progress is migrated as practice history, never automatically as retention. Earned unlocks remain open. Placement is a provisional start recommendation; it earns neither practice credit nor retention credit and schedules follow-up checks for skipped tiers.
+
+## Proving Grounds Review
+
+The three original missions in proving-data.js have tested reference implementations and negative tests for incorrect outputs and input mutation. Browser tests also cover completion gates, assistance persistence, stale-draft invalidation, import compatibility, and narrow layouts. Inputs and expected results are authored fixtures, not an independent educational audit. Local tests are inspectable and cannot establish competitive integrity. The deployment task is explicitly a model; KQL/debrief reasoning is self-reviewed. Difficulty labels and duration estimates require tester calibration.

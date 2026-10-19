@@ -39,3 +39,5 @@ console.log('PASS: 7 distinct training paths cover all 23 topics using existing 
 
 require('./tests/learning-engine.cjs');
 console.log('PASS: 115 tier lessons and transfer examples, 14 written exercises, and 3 connected missions.');
+
+require("./tests/proving.cjs");

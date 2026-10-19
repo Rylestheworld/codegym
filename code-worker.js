@@ -15,8 +15,9 @@ async function evaluateJS(job) {
   for(const test of job.cases) {
     try {
       const args=JSON.parse(JSON.stringify(test.args));
+      const before=stable(args);
       const actual=job.id==='js-cache'?cacheCase(fn,args[0]):await fn(...args);
-      results.push({pass:stable(actual)===stable(test.expected),actual:stable(actual),expected:stable(test.expected)});
+      results.push({pass:stable(actual)===stable(test.expected)&&(!job.checkUnchanged||before===stable(args)),actual:stable(actual),expected:stable(test.expected)});
     } catch(error){results.push({pass:false,error:String(error.message||error).slice(0,500)})}
   }
   return results;
@@ -25,6 +26,7 @@ async function evaluatePython(job) {
   python.globals.set('submitted_code',job.code);
   python.globals.set('submitted_name',job.name);
   python.globals.set('exercise_id',job.id);
+  python.globals.set('check_unchanged',job.checkUnchanged===true);
   python.globals.set('case_json',JSON.stringify(job.cases));
   const serialized=python.runPython(`
 import json
@@ -49,6 +51,7 @@ results = []
 for case in json.loads(case_json):
     try:
         args = case["args"]
+        before = json.dumps(args, sort_keys=True)
         if exercise_id == "py-default":
             if args[0] == "fresh":
                 first, second = fn(1), fn(2)
@@ -72,7 +75,7 @@ for case in json.loads(case_json):
                 actual = same(a, wanted) and same(b, wanted) and calls[0] == 1
         else:
             actual = fn(*args)
-        results.append({"pass": same(actual, case["expected"]), "actual": repr(actual)[:500], "expected": repr(case["expected"])})
+        results.append({"pass": same(actual, case["expected"]) and (not check_unchanged or before == json.dumps(args, sort_keys=True)), "actual": repr(actual)[:500], "expected": repr(case["expected"])})
     except Exception as error:
         results.append({"pass": False, "error": str(error)[:500]})
 json.dumps(results)

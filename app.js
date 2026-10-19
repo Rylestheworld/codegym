@@ -4,7 +4,7 @@ const languages = [...new Set(QUESTIONS.map(q => q.language))];
 const LEVELS = TIER_NAMES;
 const $ = id => document.getElementById(id);
 const escapeHTML = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fresh = () => ({version:2, xp:0, days:[], records:{}, levels:{}, lessons:[],retention:{},placement:{},written:{},missions:{},tierReads:[],tierNotes:{},issues:[]});
+const fresh = () => ({version:2, xp:0, days:[], records:{}, levels:{}, lessons:[],retention:{},placement:{},written:{},missions:{},proving:{},tierReads:[],tierNotes:{},issues:[]});
 let state = fresh();
 function validate(data) {
   if (!data || ![1,2].includes(data.version) || !Number.isSafeInteger(data.xp) || data.xp < 0 || !Array.isArray(data.days) || !data.records || typeof data.records !== 'object' || Array.isArray(data.records)) throw Error('Invalid progress file.');
@@ -30,6 +30,7 @@ function validate(data) {
     result.records[q.id] = {attempts:r.attempts,correct:r.correct,clean:r.clean,misses:r.misses,review:r.review === true};
   }
   validateLearningProgress(data,result);
+  validateProving(data,result);
   return result;
 }
 try { const saved = localStorage.getItem(KEY); if (saved) state = validate(JSON.parse(saved)); }
