@@ -2,7 +2,9 @@ let activeLesson = 'all',activeTier=0;
 function showView(view) {
   if(view==='learn' && featureExam?.kind==='retention')featureExam.assisted=true;
   if(view!=='proving' && !$('proving-view').hidden)cancelCodeRun();
-  document.querySelector('.workspace').hidden = view === 'proving';
+  document.querySelector('.workspace').classList.toggle('proving-active',view === 'proving');
+  document.querySelector('.workspace > aside').hidden = view === 'proving';
+  $('proving-tab').setAttribute('aria-pressed',String(view === 'proving'));
   $('proving-view').hidden = view !== 'proving';
   const reading = view === 'learn';
   $('learning').hidden = !reading;

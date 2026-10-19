@@ -7,8 +7,9 @@ const solutions=require('./proving-solutions.json');
  const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(process.env.CODEGYM_TEST_URL||'http://127.0.0.1:8765');
  await page.locator('#home-tab').click();assert.equal(await page.locator('#hub [data-proving]').count(),0);
- await page.locator('#proving-link').click();assert.equal(await page.locator('[data-proving]').count(),9);
- assert.equal(await page.locator('.workspace').isVisible(),false);
+ assert.equal(await page.locator('#proving-link img').count(),0);
+ await page.locator('#proving-tab').click();assert.equal(await page.locator('[data-proving]').count(),9);
+ assert.equal(await page.locator('.workspace > aside').isVisible(),false);
  const initialProgress=await page.evaluate(()=>JSON.stringify({xp:state.xp,days:state.days,records:state.records,retention:state.retention}));
  const checks=await page.evaluate(async(solutions)=>{
    const report=[];

@@ -68,4 +68,5 @@ document.addEventListener('click',event=>{const button=event.target.closest('[da
 
 document.addEventListener('DOMContentLoaded',()=>{
   $('proving-link').addEventListener('click',renderProving);
+  $('proving-tab').addEventListener('click',renderProving);
 });
