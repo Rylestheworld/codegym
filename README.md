@@ -72,16 +72,18 @@ The Pages workflow checks the curriculum metadata and learning rules, builds an 
 
 Source visibility does not imply a blanket open-source license. Third-party runtime licenses are retained under assets/pyodide/.
 
-## Proving Grounds and Personal Achievements
+## Standalone Proving Grounds
 
-Training Grounds now includes six personal milestone badges and three original advanced missions: Repair the Event Ledger (JavaScript), Diagnose the Quiet Outage (a JavaScript deployment simulation), and Investigate the Retry Window (Python with a self-reviewed KQL investigation plan). Missions are available immediately; readiness recommendations use unlocked topic tiers, including provisional placement.
+Proving Grounds has its own top-level navigation entry and full-width workspace, outside Learn, Practice, and Training Grounds. Nine missions are grouped into Advanced, Expert, and Hardcore (three each). All are available immediately. The challenge editor starts blank: there are no hints, starter scaffolds, worked examples, or reference-solution controls. The other learning sections retain their existing help and progression.
 
-Tests cover duplicates, boundary conditions, correlation, and input preservation. Each mission requires passing tests on the current draft, an 80-character debrief, and self-review. Debrief correctness is not automatically graded. Estimated durations are uncalibrated planning estimates. The deployment mission does not execute Bash, Docker, or Kubernetes; the cyber mission does not execute KQL. These are initial Proving Grounds challenges, not certifications or a complete expert curriculum.
+- Advanced: event deduplication, deployment diagnosis simulation, interval coverage.
+- Expert: login-window investigation, dependency execution waves, LRU cache replay.
+- Hardcore: framed-stream decoding, interleaved transaction recovery, a fictional byte-machine interpreter.
 
-Hints, reference solutions, and declared outside assistance mark the attempt assisted across reloads. First completion records are preserved; replaying earns no extra XP or achievements. Independent completion is self-reported. Drafts and completion records are included in existing progress exports; imported drafts must be tested again before a new completion can be recorded. Stored achievements are personal records and can be edited locally.
+JavaScript and Python execute only in the existing isolated runner. Deployment, KQL, and ISA references are bounded simulations or self-reviewed reasoning, not live tool execution. Duration and difficulty estimates need tester calibration.
 
-Shared accounts, weekly/topic rankings, and private group leaderboards remain future work. Trusted competitive scoring requires server-side validation and persistent identity; this static site does not provide those services.
+Completion requires passing tests on the current draft, an 80-character debrief, and an unassisted-work/self-review declaration. Progress stays local, with no account, leaderboard, XP, streak, retention, or topic-unlock changes. Existing assisted records retain their labels and first-completion dates. Export/import continues to include these records. Explanations and independent work are self-reported, not verified credentials.
 
-Run `node tests/browser-proving.cjs` with Playwright available in NODE_PATH and Chrome installed to verify the browser flows. Set CODEGYM_TEST_URL to the local or deployed site. The test uses an isolated browser profile and does not modify other visitors' progress.
+Reference implementations are stored in `tests/proving-solutions.json` and excluded from the published static build. Public repository source and client-side test fixtures remain inspectable; this is not an examination system. The test suite checks references, deliberately incorrect implementations, input mutation, navigation separation, mobile layout, migration, and completion gates.
 
-Security checks, contributor rules, and the security review are documented in SECURITY.md, AGENTS.md, and SECURITY_REVIEW.md. The Pages pipeline blocks publication on failed security gates.
+Run `node tests/browser-proving.cjs` with Playwright available in NODE_PATH and Chrome installed. Set CODEGYM_TEST_URL to the local or deployed site. Tests use an isolated browser profile.

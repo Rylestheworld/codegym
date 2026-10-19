@@ -1,6 +1,9 @@
 let activeLesson = 'all',activeTier=0;
 function showView(view) {
   if(view==='learn' && featureExam?.kind==='retention')featureExam.assisted=true;
+  if(view!=='proving' && !$('proving-view').hidden)cancelCodeRun();
+  document.querySelector('.workspace').hidden = view === 'proving';
+  $('proving-view').hidden = view !== 'proving';
   const reading = view === 'learn';
   $('learning').hidden = !reading;
   $('practice-view').hidden = view !== 'practice';
