@@ -51,7 +51,7 @@ const solutions=require('./proving-solutions.json');
  });console.log('PASS: completion gates, independent/assisted persistence, edit invalidation, no repeat rewards, import validation and older saves.');
  await page.setViewportSize({width:390,height:844});
  for(const view of ['mission','catalog']){if(view==='catalog')await page.locator('#pro-back').click();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true)}
- await page.screenshot({path:'/private/tmp/codegym-proving-mobile.png',fullPage:true});
+ await page.screenshot({path:require('node:path').join(require('node:os').tmpdir(),'codegym-proving-mobile.png'),fullPage:true});
  await page.locator('#learn-link').click();assert.equal(await page.locator('#learning').isVisible(),true);assert.equal(await page.locator('#proving-view').isVisible(),false);
  assert.deepEqual(errors,[]);console.log('PASS: mobile layout and no browser errors.');
  } finally {await browser.close()}
