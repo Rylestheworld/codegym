@@ -2,25 +2,64 @@ name: Validate and Deploy CodeGym
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: github-pages
+  group: codegym-${{ github.ref }}
   cancel-in-progress: false
 jobs:
+  security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Verify Security Boundaries and Vendor Integrity
+        run: python3 scripts/security_check.py
+      - name: Install Checksum-Pinned Native SAST Engine
+        run: python3 scripts/install_semgrep.py "$RUNNER_TEMP/codegym-semgrep"
+      - name: Verify Security Rule Detection
+        run: python3 scripts/test_security_rules.py "$RUNNER_TEMP/codegym-semgrep/bin/semgrep-core"
+      - name: Static Security Analysis
+        run: python3 scripts/scan_source.py "$RUNNER_TEMP/codegym-semgrep/bin/semgrep-core"
+      - name: Scan Dependency Advisories
+        run: python3 scripts/scan_dependencies.py
+      - name: Install Checksum-Pinned Secret Scanner
+        run: python3 scripts/install_gitleaks.py "$RUNNER_TEMP/codegym-security"
+      - name: Scan Repository History for Secrets
+        run: '"$RUNNER_TEMP/codegym-security/gitleaks" git --redact --no-banner --log-opts=--all .'
+      - name: Scan Working Files for Secrets
+        run: '"$RUNNER_TEMP/codegym-security/gitleaks" dir --redact --no-banner .'
   build:
+    needs: security
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
       - name: Verify Curriculum and Learning Rules
         run: node verify-bank.cjs
       - name: Build Static Site
         run: python3 scripts/build_site.py
-      - uses: actions/upload-pages-artifact@v4
+      - name: Install Locked Browser Test Dependencies
+        run: npm ci --ignore-scripts
+      - name: Install Test Browser
+        run: npx --no-install playwright install --with-deps chromium
+      - name: Browser Security and Learning Regressions
+        run: python3 scripts/run_browser_checks.py
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        if: github.event_name != 'pull_request'
         with:
           path: _site
   deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -32,4 +71,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

@@ -1,0 +1,25 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-9DWnCREnlj1tRoRy34xIulUVxSSADUSuIjaLo8EzKkM=' blob: 'unsafe-eval'; connect-src blob:; worker-src blob:; child-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>CodeGym Isolated Runner</title>
+<script>// Runs only in runner-frame.html, inside sandbox="allow-scripts" (opaque origin).
+// No learner code executes in this frame; it executes in its disposable blob worker.
+'use strict';
+if (self.origin !== 'null' || parent === window) throw Error('Runner requires an opaque-origin sandbox.');
+const parentOrigin = new URL(location.href).origin;
+let worker = null;
+addEventListener('message', event => {
+  if (event.source !== parent || event.origin !== parentOrigin || !event.data || typeof event.data !== 'object') return;
+  const data = event.data;
+  if (data.type === 'init' && !worker && typeof data.workerSource === 'string') {
+    const url = URL.createObjectURL(new Blob([data.workerSource], {type: 'text/javascript'}));
+    worker = new Worker(url);
+    worker.onmessage = message => parent.postMessage(message.data, parentOrigin);
+    worker.onerror = () => parent.postMessage({type: 'error', error: 'The isolated runner failed to start.'}, parentOrigin);
+    worker.postMessage({type: 'init', language: data.language, assets: data.assets});
+  } else if (data.type === 'run' && worker) {
+    worker.postMessage(data);
+  }
+});
+</script>

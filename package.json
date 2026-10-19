@@ -1,0 +1,11 @@
+{
+  "name": "codegym-checks",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Development-only browser regression tests; no npm packages are shipped with the site.",
+  "scripts": {
+    "test": "node verify-bank.cjs",
+    "test:security": "node tests/browser-security.cjs"
+  },
+  "devDependencies": {"playwright": "1.61.1"}
+}

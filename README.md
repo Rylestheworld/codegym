@@ -28,7 +28,7 @@ Topics: JavaScript, Python, C, C++, Rust, Java, VHDL, Bash, SQL, Assembly, Git, 
 - **Placement:** up to ten questions per topic suggest a starting tier, stopping when a tier exposes a gap. Missed concepts enter review. Placement earns no practice or retention credit; skipped tiers receive delayed checks.
 - **Due Reviews:** tier practice schedules a first retention check in three days. Each check includes an independent transfer example and two rotating tier questions. All three must be correct and confident without help. The next intervals are seven, 21, then 30 days. Two successful scheduled checks earn **Retained**. An incorrect, uncertain, or assisted check schedules a retry tomorrow and resets retention while preserving practice and unlocks. This schedule is a starting design choice, not a universal optimum.
 
-Written JavaScript and Python run in disposable browser workers, never on the HTTP server. Each submission receives a fresh worker; execution has a three-second deadline after initialization, with up to 45 seconds to load the Python runtime. Python uses bundled Pyodide 0.29.4 / CPython 3.13.2. Workers keep loops off the page and can be terminated; they are not a security boundary for running hostile third-party programs. Authored tests accept equivalent implementations that satisfy the tested requirements, rather than comparing submitted source with a reference string.
+Written JavaScript and Python run in disposable browser workers, never on the HTTP server. Each submission receives a fresh worker; execution has a three-second deadline after initialization, with up to 45 seconds to load the Python runtime. Python uses bundled Pyodide 314.0.7 / CPython 3.14.2. A sandboxed opaque-origin frame creates each worker; its CSP blocks HTTP/WebSocket access and the worker cannot access app storage. Execution deadlines do not impose a hard memory quota, and local test results are not trusted competitive credentials. See SECURITY.md for controls and limitations. Authored tests accept equivalent implementations that satisfy the tested requirements, rather than comparing submitted source with a reference string.
 
 ## Training Grounds
 
@@ -83,3 +83,5 @@ Hints, reference solutions, and declared outside assistance mark the attempt ass
 Shared accounts, weekly/topic rankings, and private group leaderboards remain future work. Trusted competitive scoring requires server-side validation and persistent identity; this static site does not provide those services.
 
 Run `node tests/browser-proving.cjs` with Playwright available in NODE_PATH and Chrome installed to verify the browser flows. Set CODEGYM_TEST_URL to the local or deployed site. The test uses an isolated browser profile and does not modify other visitors' progress.
+
+Security checks, contributor rules, and the security review are documented in SECURITY.md, AGENTS.md, and SECURITY_REVIEW.md. The Pages pipeline blocks publication on failed security gates.

@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+cd "$(git rev-parse --show-toplevel)"
+python3 scripts/security_check.py
+python3 scripts/scan_source.py .security-tools/semgrep/bin/semgrep-core
+.security-tools/gitleaks/gitleaks git --pre-commit --staged --redact --no-banner .

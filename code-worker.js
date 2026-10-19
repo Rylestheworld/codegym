@@ -1,4 +1,4 @@
-// Disposable browser worker. No submitted code is run by the local web server.
+// Disposable opaque-origin blob worker. CSP permits blob resources only; no network or app storage.
 let python;
 const stable=value=>JSON.stringify(value,(_,v)=>v && typeof v==='object' && !Array.isArray(v) ? Object.fromEntries(Object.keys(v).sort().map(k=>[k,v[k]])) : v);
 function cacheCase(fn,scenario) {
@@ -87,8 +87,13 @@ self.onmessage=async event=>{
   try {
     if(job.type==='init') {
       if(job.language==='Python') {
-        importScripts('assets/pyodide/pyodide.js');
-        python=await loadPyodide({indexURL:new URL('assets/pyodide/',self.location.href).href,stdout:()=>{},stderr:()=>{}});
+        const assets=job.assets,urls={};
+        for(const [name,bytes] of Object.entries(assets)) urls['https://runtime.invalid/'+name]=URL.createObjectURL(new Blob([bytes],{type:(name.endsWith('.js')||name.endsWith('.mjs'))?'text/javascript':name.endsWith('.wasm')?'application/wasm':'application/octet-stream'}));
+        const nativeFetch=globalThis.fetch.bind(globalThis);
+        globalThis.fetch=(input,options)=>nativeFetch(urls[String(input)]||input,options);
+        importScripts(urls['https://runtime.invalid/pyodide.js']);
+        const {default:createPyodideModule}=await import(urls['https://runtime.invalid/pyodide.asm.mjs']);
+        python=await loadPyodide({createPyodideModule,indexURL:'https://runtime.invalid/',stdLibURL:urls['https://runtime.invalid/python_stdlib.zip'],lockFileContents:JSON.parse(new TextDecoder().decode(assets['pyodide-lock.json'])),stdout:()=>{},stderr:()=>{}});
       }
       self.postMessage({type:'ready'});return;
     }

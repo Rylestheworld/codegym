@@ -1,0 +1,49 @@
+rules:
+  - id: untrusted-html
+    languages: [javascript]
+    severity: ERROR
+    message: Escape untrusted text before inserting it into HTML, or use textContent.
+    mode: taint
+    pattern-sources:
+      - pattern: $INPUT.value
+      - pattern: JSON.parse(...)
+      - pattern: localStorage.getItem(...)
+      - pattern: location.search
+      - pattern: location.hash
+    pattern-sanitizers:
+      - pattern: escapeHTML(...)
+    pattern-sinks:
+      - pattern: $EL.innerHTML = $DATA
+      - pattern: $EL.outerHTML = $DATA
+      - pattern: document.write(...)
+      - pattern: $EL.insertAdjacentHTML(...)
+  - id: dynamic-code-outside-runner
+    languages: [javascript]
+    severity: ERROR
+    message: Dynamic code evaluation is only permitted in the isolated learner worker.
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+    paths:
+      exclude: [code-worker.js, /tests/**]
+  - id: unsafe-python-shell
+    languages: [python]
+    severity: ERROR
+    message: Pass an argument array without shell=True; do not interpolate shell commands.
+    pattern-either:
+      - pattern: subprocess.$METHOD(..., shell=True, ...)
+      - pattern: os.system(...)
+  - id: disabled-tls-verification
+    languages: [python]
+    severity: ERROR
+    message: Do not disable TLS certificate verification.
+    pattern-either:
+      - pattern: requests.$METHOD(..., verify=False, ...)
+      - pattern: ssl._create_unverified_context(...)
+  - id: wildcard-window-message
+    languages: [javascript]
+    severity: ERROR
+    message: Wildcard messaging is only allowed for the authenticated opaque-origin runner bridge.
+    pattern: $TARGET.postMessage($DATA, '*')
+    paths:
+      exclude: [code-runner.js, /scripts/runner-frame-bootstrap.js, /tests/**]

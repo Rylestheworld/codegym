@@ -11,7 +11,7 @@ function validateLearningProgress(data,result) {
   for(const key of Object.keys(TIER_LESSONS)) {
     const r=data.retention?.[key];
     if(r) {
-      if(!Number.isInteger(r.stage)||r.stage<0||r.stage>4||!validDate(r.dueAt)||(r.lastPassedAt&&!validDate(r.lastPassedAt))||(r.lastCheckedAt&&!validDate(r.lastCheckedAt)))throw Error('Invalid review schedule.');
+      if(!Number.isSafeInteger(r.stage)||r.stage<0||r.stage>4||!validDate(r.dueAt)||(r.lastPassedAt&&!validDate(r.lastPassedAt))||(r.lastCheckedAt&&!validDate(r.lastCheckedAt)))throw Error('Invalid review schedule.');
       result.retention[key]={stage:r.stage,dueAt:r.dueAt,lastPassedAt:r.lastPassedAt||null,lastCheckedAt:r.lastCheckedAt||null};
     }
     if(data.tierNotes?.[key])result.tierNotes[key]=shortText(data.tierNotes[key],10000);
@@ -20,12 +20,12 @@ function validateLearningProgress(data,result) {
   result.tierReads=[...new Set((data.tierReads||[]).filter(key=>Object.hasOwn(TIER_LESSONS,key)))];
   for(const topic of languages) {
     const p=data.placement?.[topic];if(!p)continue;
-    if(!Number.isInteger(p.startLevel)||p.startLevel<1||p.startLevel>5||!validDate(p.checkedAt)||!Number.isInteger(p.correct)||!Number.isInteger(p.attempted)||p.correct<0||p.correct>p.attempted||p.attempted>10)throw Error('Invalid placement result.');
+    if(!Number.isSafeInteger(p.startLevel)||p.startLevel<1||p.startLevel>5||!validDate(p.checkedAt)||!Number.isSafeInteger(p.correct)||!Number.isSafeInteger(p.attempted)||p.correct<0||p.correct>p.attempted||p.attempted>10)throw Error('Invalid placement result.');
     result.placement[topic]={startLevel:p.startLevel,correct:p.correct,attempted:p.attempted,checkedAt:p.checkedAt};
   }
   for(const exercise of [...WRITING,MISSION_WRITING]) {
     const r=data.written?.[exercise.id];if(!r)continue;
-    if(!Number.isInteger(r.attempts)||r.attempts<0)throw Error('Invalid written exercise history.');
+    if(!Number.isSafeInteger(r.attempts)||r.attempts<0)throw Error('Invalid written exercise history.');
     result.written[exercise.id]={draft:shortText(r.draft),explanation:shortText(r.explanation,10000),attempts:r.attempts,completed:r.completed===true,assisted:r.assisted===true};
   }
   for(const mission of MISSIONS) {
@@ -86,7 +86,13 @@ function openWriting(id,missionContext=null) {
         if(context){const progress=missionProgress(context.missionId);progress.steps[context.stepId]={solved:true,draft:r.draft}}
         stats();save();
       }
-      $('code-results').innerHTML=`<div class="feedback ${passed?'':'wrong'}"><strong>${message}</strong><ol>${results.map((test,i)=>`<li>${test.pass?'✓':'×'} Test ${i+1}${test.pass?'':`: ${escapeHTML(test.error||`expected ${test.expected}; received ${test.actual}`)}`}</li>`).join('')}</ol><p class="small">Tests verify the authored requirements and edge cases; your reasoning remains a reflection to compare with the lesson.</p></div>`;
+      const feedback=document.createElement('div');feedback.className=passed?'feedback':'feedback wrong';
+      const heading=document.createElement('strong');heading.textContent=message;feedback.append(heading);
+      const list=document.createElement('ol');
+      results.forEach((test,i)=>{const item=document.createElement('li');item.textContent=`${test.pass?'✓':'×'} Test ${i+1}${test.pass?'':`: ${test.error||`expected ${test.expected}; received ${test.actual}`}`}`;list.append(item)});
+      feedback.append(list);
+      const note=document.createElement('p');note.className='small';note.textContent='Tests verify the authored requirements and edge cases; your reasoning remains a reflection to compare with the lesson.';feedback.append(note);
+      $('code-results').replaceChildren(feedback);
     }catch(error){if(token===featureToken)$('code-results').textContent=error.message}
     finally{if(token===featureToken){$('run-code').disabled=false;$('cancel-code').disabled=true}}
   });

@@ -1,0 +1,7 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {"label": "CodeGym: Security Invariants", "type": "process", "command": "python3", "args": ["scripts/security_check.py"], "problemMatcher": []},
+    {"label": "CodeGym: Static Security Scan", "type": "process", "command": "python3", "args": ["scripts/scan_source.py", ".security-tools/semgrep/bin/semgrep-core"], "problemMatcher": []}
+  ]
+}

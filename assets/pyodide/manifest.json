@@ -1,28 +1,37 @@
 {
-  "version": "0.29.4",
-  "python": "3.13.2",
-  "source": "https://github.com/pyodide/pyodide/tree/0.29.4",
-  "distribution": "https://cdn.jsdelivr.net/pyodide/v0.29.4/full/",
+  "version": "314.0.7",
+  "python": "3.14.2",
+  "source": "https://github.com/pyodide/pyodide/tree/314.0.7",
+  "distribution": "https://github.com/pyodide/pyodide/releases/download/314.0.7/pyodide-core-314.0.7.tar.bz2",
+  "archive_sha256": "2abdcc2e35208af406e07724cffa85bc582ced97e9028383ecf5462541393f95",
   "files": {
     "pyodide.js": {
-      "bytes": 18597,
-      "sha256": "7be9e63eddf6bd8786a5ab71c8689c35731d187e3415fe58d7cb95423b50421a"
+      "bytes": 18912,
+      "sha256": "3141b814715a72e59b51b1b18b9ceae5bf19f7c852417e431bb0a34feadf825c"
     },
-    "pyodide.asm.js": {
-      "bytes": 1074322,
-      "sha256": "fe75e97ef2c7a10c41f23b96344c553c7c1c62821bb206080dbb24941c06d5f3"
+    "pyodide.asm.mjs": {
+      "bytes": 1250344,
+      "sha256": "f7cdc8ece80678ceb712f8e65ebe6d3a83203a180c399865f49612a051693635"
     },
     "pyodide.asm.wasm": {
-      "bytes": 8647684,
-      "sha256": "10090fe41e019ae669d512e1f747021a8db2aaab0f6dd6f85fa9368c55d681e3"
+      "bytes": 9598218,
+      "sha256": "cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6"
     },
     "python_stdlib.zip": {
-      "bytes": 2424002,
-      "sha256": "92cb24faa546818f3ef4050fd5bd2b6487bd2042efed2113af141d035f30efb4"
+      "bytes": 2545637,
+      "sha256": "fa1957e5777068fc4f7437f96d860ae2fbe9c19732ba06c84e004ec16dd7dd7a"
     },
     "pyodide-lock.json": {
-      "bytes": 122027,
-      "sha256": "14d2c2dba101277999e17135e653d8f15389ad1437f53eae213bf0c3cdff723d"
+      "bytes": 119077,
+      "sha256": "5dc2fc119108bc148c7457dc86e7675b5c87e1cafd420b9c34c1eaef7b36c010"
+    },
+    "LICENSE.pyodide": {
+      "bytes": 16725,
+      "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5"
+    },
+    "LICENSE.python": {
+      "bytes": 13804,
+      "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231"
     }
   }
 }
