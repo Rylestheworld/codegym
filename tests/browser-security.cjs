@@ -28,6 +28,14 @@ const {chromium}=require('playwright');const assert=require('node:assert/strict'
   if(!(await running)[0].pass)throw Error('Accepted foreign message');
   if(localStorage.getItem('security-canary')!=='never-send-this')throw Error('Storage modified');
   let failed=false;try{await runWrittenCode({language:'JavaScript',name:'probe',cases:[]},'x'.repeat(50001))}catch{failed=true}if(!failed)throw Error('Oversize accepted');
+  const began=Date.now();let bounded=false;
+  try{await runWrittenCode({language:'JavaScript',name:'probe',cases:[{args:[],expected:0}]},'async function probe(){setInterval(()=>self.postMessage({type:"ready"}),10);await new Promise(()=>{});}')}
+  catch(error){bounded=error.message.includes('three seconds')}
+  if(!bounded||Date.now()-began>10000)throw Error('Ready-message flood bypassed deadline');
+  let malformed=false;
+  try{await runWrittenCode({language:'JavaScript',name:'probe',cases:[{args:[],expected:0}]},'function probe(){self.postMessage({type:"result",results:[{pass:true,actual:{toString:null}}]});return 0;}')}
+  catch(error){malformed=error.message.includes('Invalid test result')}
+  if(!malformed)throw Error('Malformed result accepted');
   const injection='</textarea><img src=x onerror="window.securityXss=true"><script>window.securityXss=true</script>';
   const saved=fresh();saved.tierNotes['Python:1']=injection;saved.proving={'event-ledger':{draft:injection,notes:injection,attempts:0,assisted:false}};
   state=validate(saved);openProving('event-ledger');

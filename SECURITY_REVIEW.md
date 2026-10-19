@@ -18,7 +18,7 @@ Scope: first-party browser code, progress imports, worker execution, bundled Pyt
 
 Gitleaks scans of repository history and working files returned no leaks. GitHub API confirmed secret scanning and push protection already enabled. OSV queries of the final package inventory returned no advisories at review time. Focused native Semgrep checks returned no unreviewed findings; isolated evaluation and opaque-frame messaging are explicit exceptions reported by the scanner wrapper.
 
-Browser tests exercise JS and Python isolation, cross-origin and same-origin HTTP denial, WebSocket and script-import denial, inaccessible app storage, forged messages, imported markup, input limits, and main-page CSP. Learning/writing/mission regressions cover ordinary operation and timeouts. CI repeats these checks on the built site. Test fixtures intentionally contain attack strings and must not be copied into application flows.
+Browser tests exercise JS and Python isolation, cross-origin and same-origin HTTP denial, WebSocket and script-import denial, inaccessible app storage, forged/malformed messages, repeated readiness messages that previously could reset a deadline, imported markup, input limits, and main-page CSP. Learning/writing/mission regressions cover ordinary operation and timeouts. CI repeats these checks on the built site. Test fixtures intentionally contain attack strings and must not be copied into application flows.
 
 No SQL backend, password database, API secrets, cloud role policies, or shared leaderboard exist in this app. SQL injection, password hashing, RBAC enforcement, database grants, and secret-vault integration therefore have no current implementation to repair. Future backend work must follow AGENTS.md and receive a new threat-model review.
 

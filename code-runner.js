@@ -17,7 +17,7 @@ function runWrittenCode(exercise,code) {
     const frame=document.createElement('iframe');
     frame.sandbox='allow-scripts';frame.hidden=true;frame.title='Isolated Code Runner';frame.referrerPolicy='no-referrer';
     frame.src='runner-frame.html';
-    const run={frame,timer:null,finish:null};
+    const run={frame,timer:null,finish:null};let phase='loading';
     const finish=(error,results)=>{
       if(activeRunner!==run)return;
       clearTimeout(run.timer);window.removeEventListener('message',receive);frame.remove();activeRunner=null;
@@ -27,13 +27,14 @@ function runWrittenCode(exercise,code) {
     const receive=event=>{
       if(event.source!==frame.contentWindow||event.origin!=='null'||!event.data)return;
       const data=event.data;
-      if(data.type==='ready'){
+      if(data.type==='ready' && phase==='loading'){
+        phase='running';
         clearTimeout(run.timer);run.timer=setTimeout(()=>finish('Execution exceeded three seconds. Check for an infinite loop or unresolved promise.'),3000);
         frame.contentWindow.postMessage({...exercise,type:'run',code},'*');
-      }else if(data.type==='error')finish(String(data.error||'Execution failed.').slice(0,1000));
-      else if(data.type==='result'){
-        if(!Array.isArray(data.results)||data.results.length!==exercise.cases.length)return finish('Invalid test result.');
-        const results=data.results.map(t=>({pass:t?.pass===true,actual:String(t?.actual??'').slice(0,1000),expected:String(t?.expected??'').slice(0,1000),error:t?.error?String(t.error).slice(0,1000):undefined}));
+      }else if(data.type==='error')finish(typeof data.error==='string'?data.error.slice(0,1000):'Execution failed.');
+      else if(data.type==='result' && phase==='running'){
+        if(!Array.isArray(data.results)||data.results.length!==exercise.cases.length||!data.results.every(t=>t&&typeof t==='object'&&typeof t.pass==='boolean'&&['actual','expected','error'].every(k=>t[k]===undefined||typeof t[k]==='string')))return finish('Invalid test result.');
+        const results=data.results.map(t=>({pass:t?.pass===true,actual:(t.actual||'').slice(0,1000),expected:(t.expected||'').slice(0,1000),error:t.error?t.error.slice(0,1000):undefined}));
         finish(null,results);
       }
     };
