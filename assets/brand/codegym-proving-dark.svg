@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+ <title>CodeGym Proving Grounds</title>
+ <path d="M32 3 57 17v30L32 61 7 47V17Z" fill="#f4f1e9"/>
+ <path d="m23 23-9 9 9 9m18-18 9 9-9 9" stroke="#182a24" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="M35 14 25 34h7l-3 16 12-23h-8Z" fill="#182a24"/>
+</svg>

@@ -40,3 +40,7 @@ Preserve the aspect ratio and original geometry. Avoid stretching, adding gradie
 | Shield Lift | Training Grounds tab and header, cyber and RE path cards | Applied judgment and investigation foundations |
 
 Decorative instances have empty alternative text when adjacent text already names the section. Avoid adding symbols to every card or paragraph.
+
+## Proving Grounds — The Code Bolt
+
+Use `codegym-proving.svg` for the standalone challenge track: a hexagonal badge, code brackets, and a lightning bolt. Palette: forest #182a24 and lime #d9fc75. Use `codegym-proving-dark.svg` on dark surfaces without a lime backing. Preserve the square aspect ratio and keep at least 8/64 of the mark width clear around it. Minimum display size: 23 px; use larger sizes for section headers. Do not substitute this mark for Learn, Practice, or Training Grounds.
